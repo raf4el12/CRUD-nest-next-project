@@ -2,7 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../../prisma/prisma.service';
 import { CategoryRepository } from '../../domain/repositories/category.repository';
 import { Category } from '../../domain/entities/category.entity';
-import { Category as PrismaCategory } from '@prisma/client';
+import { Category as PrismaCategory, Prisma } from '@prisma/client';
+import { Pagination } from '../../../../shared/utils/value-objects/pagination.value-object';
+import pagination from '../../../../shared/utils/pagination';
 
 @Injectable()
 export class PrismaCategoryRepository implements CategoryRepository {
@@ -30,21 +32,35 @@ export class PrismaCategoryRepository implements CategoryRepository {
     return found ? this.toDomain(found) : null;
   }
 
-  async findAll(filters: { search?: string; skip?: number; take?: number }): Promise<Category[] | null> {
-    const items = await this.prisma.category.findMany({
+  async findAllPagination(queryPagination: Pagination): Promise<any> {
+    const { searchValue, currentPage, pageSize, orderBy, orderByMode } = queryPagination;
+    const dynamicOrderBy = { [orderBy || 'createdAt']: orderByMode || 'desc' };
+    const { limit, offset } = pagination.getPagination(currentPage, pageSize);
+
+    const query: Prisma.CategoryFindManyArgs = {
       where: {
-        name: filters.search
+        name: searchValue
           ? {
-              contains: filters.search,
+              contains: searchValue,
             }
           : undefined,
       },
-      orderBy: { createdAt: 'desc' },
-      skip: filters.skip,
-      take: filters.take,
-    });
+      orderBy: [dynamicOrderBy],
+      take: limit,
+      skip: offset,
+    };
 
-    return items.map((item) => this.toDomain(item));
+    const [items, count] = await this.prisma.$transaction([
+      this.prisma.category.findMany(query),
+      this.prisma.category.count({ where: query.where }),
+    ]);
+
+    const dataResponse = {
+      rows: items.map((item) => this.toDomain(item)),
+      count,
+    };
+
+    return pagination.getDataPagination(dataResponse, currentPage, limit);
   }
 
   async update(id: number, data: Partial<Category>): Promise<Category | null> {

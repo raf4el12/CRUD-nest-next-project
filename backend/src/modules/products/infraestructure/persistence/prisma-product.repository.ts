@@ -2,7 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../../prisma/prisma.service';
 import { ProductRepository } from '../../domain/repositories/product.repository';
 import { Product } from '../../domain/entities/product.entity';
-import { Product as PrismaProduct } from '@prisma/client';
+import { Product as PrismaProduct, Prisma } from '@prisma/client';
+import { Pagination } from '../../../../shared/utils/value-objects/pagination.value-object';
+import pagination from '../../../../shared/utils/pagination';
 
 @Injectable()
 export class PrismaProductRepository implements ProductRepository {
@@ -35,36 +37,53 @@ export class PrismaProductRepository implements ProductRepository {
     return found ? this.toDomain(found) : null;
   }
 
-  async findAll(filters: {
-    search?: string;
-    categoryId?: number;
-    isAvailable?: boolean;
-    minPrice?: number;
-    maxPrice?: number;
-    skip?: number;
-    take?: number;
-  }): Promise<Product[] | null> {
-    const items = await this.prisma.product.findMany({
+  async findAllPagination(
+    queryPagination: Pagination,
+    filters?: {
+      categoryId?: number;
+      isAvailable?: boolean;
+      minPrice?: number;
+      maxPrice?: number;
+    },
+  ): Promise<any> {
+    const { searchValue, currentPage, pageSize, orderBy, orderByMode } = queryPagination;
+    const dynamicOrderBy = { [orderBy || 'createdAt']: orderByMode || 'desc' };
+    const { limit, offset } = pagination.getPagination(currentPage, pageSize);
+
+    const query: Prisma.ProductFindManyArgs = {
       where: {
         deletedAt: null,
-        isAvailable: filters.isAvailable ?? undefined,
-        categoryId: filters.categoryId ?? undefined,
-        name: filters.search
+        isAvailable: filters?.isAvailable ?? undefined,
+        categoryId: filters?.categoryId ?? undefined,
+        ...(searchValue
           ? {
-              contains: filters.search,
+              OR: [
+                { name: { contains: searchValue } },
+                { description: { contains: searchValue } },
+              ],
             }
-          : undefined,
+          : {}),
         price: {
-          gte: filters.minPrice ?? undefined,
-          lte: filters.maxPrice ?? undefined,
+          gte: filters?.minPrice ?? undefined,
+          lte: filters?.maxPrice ?? undefined,
         },
       },
-      orderBy: { createdAt: 'desc' },
-      skip: filters.skip,
-      take: filters.take,
-    });
+      orderBy: [dynamicOrderBy],
+      take: limit,
+      skip: offset,
+    };
 
-    return items.map((item) => this.toDomain(item));
+    const [items, count] = await this.prisma.$transaction([
+      this.prisma.product.findMany(query),
+      this.prisma.product.count({ where: query.where }),
+    ]);
+
+    const dataResponse = {
+      rows: items.map((item) => this.toDomain(item)),
+      count,
+    };
+
+    return pagination.getDataPagination(dataResponse, currentPage, limit);
   }
 
   async update(id: number, data: Partial<Product>): Promise<Product | null> {

@@ -4,10 +4,10 @@ import { CreateProductUseCase } from '../../application/use-cases/create-product
 import { UpdateProductUseCase } from '../../application/use-cases/update-product.use-case';
 import { DeleteProductUseCase } from '../../application/use-cases/delete-product.use-case';
 import { FindOneProductUseCase } from '../../application/use-cases/findone-product.use-case';
-import { FindAllProductUseCase } from '../../application/use-cases/findall-product.use-case';
+import { FindAllProductPaginationUseCase } from '../../application/use-cases/findall-product-pagination.use-case';
 import { CreateProductDto } from '../../application/dto/create-product.dto';
 import { UpdateProductDto } from '../../application/dto/update-product.dto';
-import { FindAllProductDto } from '../../application/dto/findall-product.dto';
+import { PaginationProductDto } from '../../application/dto/pagination-product.dto';
 
 @ApiTags('products')
 @Controller('products')
@@ -17,7 +17,7 @@ export class ProductController {
     private readonly updateProduct: UpdateProductUseCase,
     private readonly deleteProduct: DeleteProductUseCase,
     private readonly findOneProduct: FindOneProductUseCase,
-    private readonly findAllProduct: FindAllProductUseCase,
+    private readonly findAllProductPagination: FindAllProductPaginationUseCase,
   ) {}
 
   @Post()
@@ -25,9 +25,9 @@ export class ProductController {
     return this.createProduct.execute(dto);
   }
 
-  @Get()
-  findAll(@Query() filters: FindAllProductDto) {
-    return this.findAllProduct.execute(filters);
+  @Get('pagination')
+  findAllPagination(@Query() queryPagination: PaginationProductDto) {
+    return this.findAllProductPagination.execute(queryPagination);
   }
 
   @Get(':id')

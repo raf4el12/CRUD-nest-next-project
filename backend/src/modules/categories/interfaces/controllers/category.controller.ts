@@ -4,10 +4,10 @@ import { CreateCategoryUseCase } from '../../application/use-cases/create-catego
 import { UpdateCategoryUseCase } from '../../application/use-cases/update-category.use-case';
 import { DeleteCategoryUseCase } from '../../application/use-cases/delete-category.use-case';
 import { FindOneCategoryUseCase } from '../../application/use-cases/findone-category.use-case';
-import { FindAllCategoryUseCase } from '../../application/use-cases/findall-category.use-case';
+import { FindAllCategoryPaginationUseCase } from '../../application/use-cases/findall-category-pagination.use-case';
 import { CreateCategoryDto } from '../../application/dto/create-category.dto';
 import { UpdateCategoryDto } from '../../application/dto/update-category.dto';
-import { FindAllCategoryDto } from '../../application/dto/findall-category.dto';
+import { PaginationCategoryDto } from '../../application/dto/pagination-category.dto';
 
 @ApiTags('categories')
 @Controller('categories')
@@ -17,7 +17,7 @@ export class CategoryController {
     private readonly updateCategory: UpdateCategoryUseCase,
     private readonly deleteCategory: DeleteCategoryUseCase,
     private readonly findOneCategory: FindOneCategoryUseCase,
-    private readonly findAllCategory: FindAllCategoryUseCase,
+    private readonly findAllCategoryPagination: FindAllCategoryPaginationUseCase,
   ) {}
 
   @Post()
@@ -25,9 +25,9 @@ export class CategoryController {
     return this.createCategory.execute(dto);
   }
 
-  @Get()
-  findAll(@Query() filters: FindAllCategoryDto) {
-    return this.findAllCategory.execute(filters);
+  @Get('pagination')
+  findAllPagination(@Query() queryPagination: PaginationCategoryDto) {
+    return this.findAllCategoryPagination.execute(queryPagination);
   }
 
   @Get(':id')

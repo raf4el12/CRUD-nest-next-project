@@ -4,7 +4,7 @@ import { CreateProductUseCase } from './use-cases/create-product.use-case';
 import { UpdateProductUseCase } from './use-cases/update-product.use-case';
 import { DeleteProductUseCase } from './use-cases/delete-product.use-case';
 import { FindOneProductUseCase } from './use-cases/findone-product.use-case';
-import { FindAllProductUseCase } from './use-cases/findall-product.use-case';
+import { FindAllProductPaginationUseCase } from './use-cases/findall-product-pagination.use-case';
 import { PrismaProductRepository } from '../infraestructure/persistence/prisma-product.repository';
 import { PRODUCT_REPOSITORY } from '../domain/repositories/product.repository';
 
@@ -15,12 +15,12 @@ import { PRODUCT_REPOSITORY } from '../domain/repositories/product.repository';
     UpdateProductUseCase,
     DeleteProductUseCase,
     FindOneProductUseCase,
-    FindAllProductUseCase,
+    FindAllProductPaginationUseCase,
     {
       provide: PRODUCT_REPOSITORY,
       useClass: PrismaProductRepository,
     },
   ],
-  exports: [CreateProductUseCase, FindAllProductUseCase],
+  exports: [CreateProductUseCase, FindAllProductPaginationUseCase],
 })
 export class ProductsModule {}
