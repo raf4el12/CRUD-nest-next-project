@@ -1,5 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
@@ -7,6 +5,12 @@ generator client {
 
 datasource db {
   provider = "sqlite"
+}
+
+enum UserRole {
+  ADMIN
+  CUSTOMER
+  SUPPORT
 }
 
 model Category {
@@ -21,12 +25,117 @@ model Product {
   id          Int       @id @default(autoincrement())
   name        String
   description String?
-  price       Float
+  price  Float
   image       String?
   isAvailable Boolean   @default(true)
   deletedAt   DateTime?
   categoryId  Int?
-  category    Category? @relation(fields: [categoryId], references: [id])
+  category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  @@index([categoryId])
+  @@index([isAvailable])
+  @@index([deletedAt])
+}
+model Users {
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  passwordHash  String
+  role          UserRole @default(CUSTOMER)
+  emailVerified Boolean  @default(false)
+  deletedAt     DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  profile       Profiles?
+  customer      Customers?
+
+  refreshTokens RefreshTokens[]
+
+  verifyTokens  EmailVerificationTokens[]
+  resetTokens   PasswordResetTokens[]
+
+  @@index([role])
+  @@index([deletedAt])
+}
+
+model Profiles {
+  id             Int      @id @default(autoincrement())
+  userId         Int      @unique
+  user           Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  firstName      String
+  lastName       String
+  phone          String?
+  photo          String?
+
+  documentType   String?  @default("DNI")
+  documentNumber String?
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([documentNumber])
+}
+
+model Customers {
+  id              Int      @id @default(autoincrement())
+  userId          Int      @unique
+  user            Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  points          Int      @default(0)
+  level           String   @default("BRONZE")
+  newsletter      Boolean  @default(true)
+
+  shippingAddress String?
+  billingAddress  String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model RefreshTokens {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  user          Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jti           String   @unique
+  familyId      String
+
+  tokenHash     String
+  expiresAt     DateTime
+
+  createdAt     DateTime @default(now())
+  revokedAt     DateTime?
+  replacedByJti String?
+
+  ip            String?
+  userAgent     String?
+
+  @@index([userId])
+  @@index([familyId])
+  @@index([expiresAt])
+}
+
+model EmailVerificationTokens {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model PasswordResetTokens {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  token     String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }
