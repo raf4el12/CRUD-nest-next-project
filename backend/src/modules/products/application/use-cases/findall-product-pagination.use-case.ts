@@ -1,5 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { PRODUCT_REPOSITORY, ProductRepository } from '../../domain/repositories/product.repository';
+import {
+  PRODUCT_REPOSITORY,
+  ProductRepository,
+} from '../../domain/repositories/product.repository';
 import { Pagination } from '../../../../shared/utils/value-objects/pagination.value-object';
 import { PaginationProductDto } from '../dto/pagination-product.dto';
 

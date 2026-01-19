@@ -9,7 +9,11 @@ const getPagination = (currentPage: number, size: number) => {
   return { limit, offset };
 };
 
-const getDataPagination = <T>(data: DataPagination<T>, page: number, limit: number) => {
+const getDataPagination = <T>(
+  data: DataPagination<T>,
+  page: number,
+  limit: number,
+) => {
   const { count: totalItems, rows } = data;
   const currentPage = page ? +page : 1;
   const totalPages = Math.ceil(totalItems / limit);

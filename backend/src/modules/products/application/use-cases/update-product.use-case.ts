@@ -1,5 +1,8 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { PRODUCT_REPOSITORY, ProductRepository } from '../../domain/repositories/product.repository';
+import {
+  PRODUCT_REPOSITORY,
+  ProductRepository,
+} from '../../domain/repositories/product.repository';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { Product } from '../../domain/entities/product.entity';
 

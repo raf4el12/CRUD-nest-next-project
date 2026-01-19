@@ -1,5 +1,8 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { CATEGORY_REPOSITORY, CategoryRepository } from '../../domain/repositories/category.repository';
+import {
+  CATEGORY_REPOSITORY,
+  CategoryRepository,
+} from '../../domain/repositories/category.repository';
 
 @Injectable()
 export class DeleteCategoryUseCase {

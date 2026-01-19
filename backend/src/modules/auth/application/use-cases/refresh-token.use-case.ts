@@ -1,8 +1,14 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { RefreshTokenDto } from '../dto/refresh-token.dto';
-import { REFRESH_TOKEN_REPOSITORY, RefreshTokenRepository } from '../../domain/repositories/refresh-token.repository';
+import {
+  REFRESH_TOKEN_REPOSITORY,
+  RefreshTokenRepository,
+} from '../../domain/repositories/refresh-token.repository';
 import { TokenService } from '../../infraestructure/services/token.service';
-import { USER_REPOSITORY, UserRepository } from '../../../users/domain/repositories/user.repository';
+import {
+  USER_REPOSITORY,
+  UserRepository,
+} from '../../../users/domain/repositories/user.repository';
 
 export interface RefreshResponse {
   accessToken: string;

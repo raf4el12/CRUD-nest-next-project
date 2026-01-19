@@ -31,7 +31,12 @@ export interface UserRepository {
   createUser(data: CreateUserInput): Promise<User>;
   createProfile(data: CreateProfileInput): Promise<Profile>;
   createCustomer(data: CreateCustomerInput): Promise<Customer>;
-  findAuthByEmail(email: string): Promise<{ id: number; email: string; passwordHash: string; role: UserRole } | null>;
+  findAuthByEmail(email: string): Promise<{
+    id: number;
+    email: string;
+    passwordHash: string;
+    role: UserRole;
+  } | null>;
   findByEmail(email: string): Promise<User | null>;
   findById(id: number): Promise<User | null>;
   findByIdWithRelations(id: number): Promise<User | null>;
