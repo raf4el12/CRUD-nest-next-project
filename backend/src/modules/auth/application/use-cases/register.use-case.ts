@@ -1,5 +1,8 @@
 import { ConflictException, Inject, Injectable } from '@nestjs/common';
-import { USER_REPOSITORY, UserRepository } from '../../../users/domain/repositories/user.repository';
+import {
+  USER_REPOSITORY,
+  UserRepository,
+} from '../../../users/domain/repositories/user.repository';
 import { RegisterDto } from '../dto/register.dto';
 import { PasswordService } from '../../infraestructure/services/password.service';
 import { User } from '../../../users/domain/entities/user.entity';

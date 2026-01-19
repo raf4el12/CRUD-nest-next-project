@@ -46,7 +46,8 @@ export class PrismaProductRepository implements ProductRepository {
       maxPrice?: number;
     },
   ): Promise<any> {
-    const { searchValue, currentPage, pageSize, orderBy, orderByMode } = queryPagination;
+    const { searchValue, currentPage, pageSize, orderBy, orderByMode } =
+      queryPagination;
     const dynamicOrderBy = { [orderBy || 'createdAt']: orderByMode || 'desc' };
     const { limit, offset } = pagination.getPagination(currentPage, pageSize);
 
@@ -102,7 +103,9 @@ export class PrismaProductRepository implements ProductRepository {
     return this.toDomain(updated);
   }
 
-  async softDelete(id: number): Promise<{ message: string; entity: Product | null }> {
+  async softDelete(
+    id: number,
+  ): Promise<{ message: string; entity: Product | null }> {
     const deleted = await this.prisma.product.update({
       where: { id },
       data: { deletedAt: new Date(), isAvailable: false },

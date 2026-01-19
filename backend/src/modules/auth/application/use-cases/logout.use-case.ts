@@ -1,6 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RefreshTokenDto } from '../dto/refresh-token.dto';
-import { REFRESH_TOKEN_REPOSITORY, RefreshTokenRepository } from '../../domain/repositories/refresh-token.repository';
+import {
+  REFRESH_TOKEN_REPOSITORY,
+  RefreshTokenRepository,
+} from '../../domain/repositories/refresh-token.repository';
 import { TokenService } from '../../infraestructure/services/token.service';
 
 @Injectable()

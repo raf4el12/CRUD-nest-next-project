@@ -1,5 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CATEGORY_REPOSITORY, CategoryRepository } from '../../domain/repositories/category.repository';
+import {
+  CATEGORY_REPOSITORY,
+  CategoryRepository,
+} from '../../domain/repositories/category.repository';
 import { Pagination } from '../../../../shared/utils/value-objects/pagination.value-object';
 import { PaginationCategoryDto } from '../dto/pagination-category.dto';
 

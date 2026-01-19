@@ -55,9 +55,12 @@ export class PrismaUserRepository implements UserRepository {
     return this.toDomainCustomer(created);
   }
 
-  async findAuthByEmail(
-    email: string,
-  ): Promise<{ id: number; email: string; passwordHash: string; role: Users['role'] } | null> {
+  async findAuthByEmail(email: string): Promise<{
+    id: number;
+    email: string;
+    passwordHash: string;
+    role: Users['role'];
+  } | null> {
     const found = await this.prisma.users.findFirst({
       where: { email, deletedAt: null },
       select: { id: true, email: true, passwordHash: true, role: true },
@@ -72,7 +75,9 @@ export class PrismaUserRepository implements UserRepository {
       include: { profile: true, customer: true },
     });
 
-    return found ? this.toDomainUser(found, found.profile, found.customer) : null;
+    return found
+      ? this.toDomainUser(found, found.profile, found.customer)
+      : null;
   }
 
   async findById(id: number): Promise<User | null> {
@@ -89,7 +94,9 @@ export class PrismaUserRepository implements UserRepository {
       include: { profile: true, customer: true },
     });
 
-    return found ? this.toDomainUser(found, found.profile, found.customer) : null;
+    return found
+      ? this.toDomainUser(found, found.profile, found.customer)
+      : null;
   }
 
   async updatePassword(userId: number, passwordHash: string): Promise<void> {
@@ -99,7 +106,11 @@ export class PrismaUserRepository implements UserRepository {
     });
   }
 
-  private toDomainUser(user: Users, profile?: Profiles | null, customer?: Customers | null): User {
+  private toDomainUser(
+    user: Users,
+    profile?: Profiles | null,
+    customer?: Customers | null,
+  ): User {
     return new User(
       user.id,
       user.email,

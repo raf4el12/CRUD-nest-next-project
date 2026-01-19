@@ -33,7 +33,8 @@ export class PrismaCategoryRepository implements CategoryRepository {
   }
 
   async findAllPagination(queryPagination: Pagination): Promise<any> {
-    const { searchValue, currentPage, pageSize, orderBy, orderByMode } = queryPagination;
+    const { searchValue, currentPage, pageSize, orderBy, orderByMode } =
+      queryPagination;
     const dynamicOrderBy = { [orderBy || 'createdAt']: orderByMode || 'desc' };
     const { limit, offset } = pagination.getPagination(currentPage, pageSize);
 
@@ -74,7 +75,9 @@ export class PrismaCategoryRepository implements CategoryRepository {
     return this.toDomain(updated);
   }
 
-  async delete(id: number): Promise<{ message: string; entity: Category | null }> {
+  async delete(
+    id: number,
+  ): Promise<{ message: string; entity: Category | null }> {
     const deleted = await this.prisma.category.delete({
       where: { id },
     });
@@ -86,6 +89,11 @@ export class PrismaCategoryRepository implements CategoryRepository {
   }
 
   private toDomain(category: PrismaCategory): Category {
-    return new Category(category.id, category.name, category.createdAt, category.updatedAt ?? null);
+    return new Category(
+      category.id,
+      category.name,
+      category.createdAt,
+      category.updatedAt ?? null,
+    );
   }
 }
