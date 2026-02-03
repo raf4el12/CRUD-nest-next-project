@@ -1,4 +1,4 @@
-import { CategoriesView } from "@/views/categories/CategoriesView";
+import { CategoriesView } from "@/features/admin";
 
 type SearchParams = {
   currentPage?: string;

@@ -1,4 +1,4 @@
-import { AdminProductsView } from "@/views/admin/products/AdminProductsView";
+import { AdminProductsView } from "@/features/admin";
 
 type SearchParams = {
   currentPage?: string;
