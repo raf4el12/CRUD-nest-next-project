@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from '@/shared/lib';
+import { cn } from '@/shared/lib/utils';
 import ChevronLeft from 'lucide-react/dist/esm/icons/chevron-left';
 import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
 import LogOut from 'lucide-react/dist/esm/icons/log-out';
@@ -10,7 +10,7 @@ import Package from 'lucide-react/dist/esm/icons/package';
 import Settings from 'lucide-react/dist/esm/icons/settings';
 import Tags from 'lucide-react/dist/esm/icons/tags';
 import { Button } from '@/shared/ui/button';
-import { useAuth } from '@/features/auth';
+import { useAuth } from '@/features/auth/context/auth-context';
 import { Separator } from '@/shared/ui/separator';
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {

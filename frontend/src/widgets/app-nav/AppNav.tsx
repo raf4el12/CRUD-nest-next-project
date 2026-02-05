@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useAuth } from "@/features/auth";
+import { useAuth } from "@/features/auth/context/auth-context";
 import { Button } from "@/shared/ui/button";
 
 export function AppNav() {

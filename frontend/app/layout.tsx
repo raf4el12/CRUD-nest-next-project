@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Source_Sans_3, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
-import { cn } from "@/shared/lib";
-import { AppNav } from "@/widgets/app-nav";
+import { cn } from "@/shared/lib/utils";
+import { AppNav } from "@/widgets/app-nav/AppNav";
 import { ToasterProvider } from "@/shared/providers/toaster-provider";
-import { AuthProvider } from "@/features/auth";
+import { AuthProvider } from "@/features/auth/context/auth-context";
 
 const fontSans = Source_Sans_3({
   variable: "--font-sans",

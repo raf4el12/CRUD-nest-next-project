@@ -1,5 +1,5 @@
-import { apiClient } from '@/shared/api';
-import { LoginDto, LoginResponse, RegisterDto, User } from '../types';
+import { apiClient } from '@/shared/api/client';
+import type { LoginDto, LoginResponse, RegisterDto, User } from '../types';
 import Cookies from 'js-cookie';
 
 export const authService = {

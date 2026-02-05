@@ -1,11 +1,9 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { 
-  fetchCategoriesPagination, 
-  CategoriesToolbar, 
-  CategoriesTable, 
-  CategoryCards 
-} from "@/features/categories";
+import { CategoriesToolbar } from "@/features/categories/components/CategoriesToolbar";
+import { CategoriesTable } from "@/features/categories/components/CategoriesTable";
+import { CategoryCards } from "@/features/categories/components/CategoryCards";
+import { fetchCategoriesPagination } from "@/features/categories/services/categories.service";
 
 type SearchParams = {
   currentPage?: string;
@@ -31,28 +29,39 @@ export function CategoriesView(props: {
   basePath?: string;
 }) {
   const basePath = props.basePath ?? "/categories";
+  const isAdmin = basePath.startsWith("/admin");
 
-  return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-      <section className="space-y-6">
+  const content = (
+    <section className="space-y-6">
+      {!isAdmin && (
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-semibold">Categorías</h1>
           <p className="text-sm text-muted-foreground">
             Administra las categorías con vistas de tabla o cards.
           </p>
         </div>
+      )}
 
-        <div className="rounded-xl border bg-card p-5 shadow-sm">
-          <CategoriesToolbar />
-        </div>
+      <div className="rounded-lg border-2 border-border bg-card p-4 shadow-sm">
+        <CategoriesToolbar />
+      </div>
 
-        <Suspense fallback={<CategoriesFallback />}>
-          <CategoriesContent
-            searchParamsPromise={props.searchParams}
-            basePath={basePath}
-          />
-        </Suspense>
-      </section>
+      <Suspense fallback={<CategoriesFallback />}>
+        <CategoriesContent
+          searchParamsPromise={props.searchParams}
+          basePath={basePath}
+        />
+      </Suspense>
+    </section>
+  );
+
+  if (isAdmin) {
+    return content;
+  }
+
+  return (
+    <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+      {content}
     </div>
   );
 }
@@ -111,47 +120,42 @@ async function CategoriesContent(props: {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border bg-card p-4 shadow-sm">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-          <div className="space-y-1">
-            <h2 className="text-base font-semibold">Listado</h2>
-            <p className="text-sm text-muted-foreground">{totalItemsLabel}</p>
-          </div>
-
-          <form
-            className="flex flex-1 flex-wrap gap-2 lg:justify-end"
-            method="get"
-            action={props.basePath}
+      <div className="rounded-lg border-2 border-border bg-card p-4 shadow-[0_1px_12px_rgba(15,23,42,0.06)]">
+        <form
+          className="grid gap-2 md:grid-cols-4"
+          method="get"
+          action={props.basePath}
+        >
+          <label className="sr-only" htmlFor="categories-search">
+            Buscar categorías
+          </label>
+          <input
+            id="categories-search"
+            type="search"
+            className="h-9 md:col-span-2 rounded-md border-2 border-input bg-background px-3 text-sm font-medium shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            name="searchValue"
+            defaultValue={searchValue}
+            placeholder="Buscar categorías..."
+            autoComplete="off"
+            spellCheck={false}
+          />
+          <input type="hidden" name="pageSize" value={pageSize} />
+          <input type="hidden" name="orderBy" value={orderBy} />
+          <input type="hidden" name="orderByMode" value={orderByMode} />
+          <input type="hidden" name="view" value={view} />
+          <button
+            className="h-10 rounded-[10px] border-2 border-input bg-background px-4 text-[11px] font-semibold uppercase tracking-[0.2em] shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+            type="submit"
           >
-            <label className="sr-only" htmlFor="categories-search">
-              Buscar categorías
-            </label>
-            <input
-              id="categories-search"
-              type="search"
-              className="min-w-55 flex-1 rounded-md border bg-background px-3 py-2 text-sm"
-              name="searchValue"
-              defaultValue={searchValue}
-              placeholder="Buscar categorías..."
-              autoComplete="off"
-              spellCheck={false}
-            />
-            <input type="hidden" name="pageSize" value={pageSize} />
-            <input type="hidden" name="orderBy" value={orderBy} />
-            <input type="hidden" name="orderByMode" value={orderByMode} />
-            <input type="hidden" name="view" value={view} />
-            <button className="rounded-md border px-3 py-2 text-sm" type="submit">
-              Buscar
-            </button>
-          </form>
-
-          <div className="flex items-center gap-2">
+            Buscar
+          </button>
+          <div className="flex w-full flex-wrap items-center gap-2 md:w-auto md:justify-end">
             <Link
               aria-current={view === "table" ? "page" : undefined}
-              className={`rounded-md border px-3 py-2 text-sm transition-colors ${
+              className={`h-10 flex-1 rounded-[10px] border-2 border-input px-4 text-center text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors md:flex-none ${
                 view === "table"
                   ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "bg-background hover:bg-accent hover:text-accent-foreground"
               }`}
               href={`${props.basePath}?${buildQuery({
                 ...baseQuery,
@@ -159,14 +163,14 @@ async function CategoriesContent(props: {
                 currentPage: page,
               })}`}
             >
-              Tabla
+              <span className="flex h-full w-full items-center justify-center">Tabla</span>
             </Link>
             <Link
               aria-current={view === "cards" ? "page" : undefined}
-              className={`rounded-md border px-3 py-2 text-sm transition-colors ${
+              className={`h-10 flex-1 rounded-[10px] border-2 border-input px-4 text-center text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors md:flex-none ${
                 view === "cards"
                   ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "bg-background hover:bg-accent hover:text-accent-foreground"
               }`}
               href={`${props.basePath}?${buildQuery({
                 ...baseQuery,
@@ -174,13 +178,16 @@ async function CategoriesContent(props: {
                 currentPage: page,
               })}`}
             >
-              Cards
+              <span className="flex h-full w-full items-center justify-center">Cards</span>
             </Link>
           </div>
-        </div>
+          <p className="md:col-span-4 text-sm text-muted-foreground">
+            {totalItemsLabel}
+          </p>
+        </form>
       </div>
 
-      <div className="rounded-xl border bg-card p-4 shadow-sm">
+      <div className="rounded-lg border-2 border-border bg-card p-4 shadow-sm">
         {view === "cards" ? (
           <CategoryCards categories={data.data} />
         ) : (

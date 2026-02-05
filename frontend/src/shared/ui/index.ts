@@ -58,3 +58,60 @@ export {
   SheetDescription,
 } from './sheet';
 export { Toaster } from './sonner';
+
+// New shadcn components
+export {
+  Select,
+  SelectGroup,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectLabel,
+  SelectItem,
+  SelectSeparator,
+} from './select';
+export { Checkbox } from './checkbox';
+export { Badge, badgeVariants } from './badge';
+export {
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableCaption,
+} from './table';
+export { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
+export { Textarea } from './textarea';
+export { Switch } from './switch';
+export { ScrollArea, ScrollBar } from './scroll-area';
+export {
+  Dialog,
+  DialogPortal,
+  DialogOverlay,
+  DialogTrigger,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from './dialog';
+export {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from './tooltip';
+export { Progress } from './progress';
+export { Alert, AlertTitle, AlertDescription } from './alert';
+
+// DataTable (TanStack Table based)
+export {
+  DataTable,
+  DebouncedInput,
+  TablePagination,
+  fuzzyFilter,
+  fuzzySort,
+} from './data-table';

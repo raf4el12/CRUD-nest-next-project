@@ -1,7 +1,7 @@
-import { apiClient } from "@/shared/api";
-import { Category } from "../types";
-import { CategoryFormValues } from "../validators/category";
-import { PaginatedResponse } from "@/shared/types";
+import { apiClient } from "@/shared/api/client";
+import type { Category } from "../types";
+import type { CategoryFormValues } from "../validators/category";
+import type { PaginatedResponse } from "@/shared/types";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
 
@@ -14,6 +14,23 @@ export const categoriesService = {
   async updateCategory(id: number, payload: CategoryFormValues): Promise<Category> {
     const response = await apiClient.patch<Category>(`/categories/${id}`, payload);
     return response.data;
+  },
+
+  async deleteCategory(id: number): Promise<void> {
+    await apiClient.delete(`/categories/${id}`);
+  },
+
+  async getAllCategories(): Promise<Category[]> {
+    const response = await apiClient.get<PaginatedResponse<Category>>(
+      "/categories/pagination",
+      {
+        params: {
+          currentPage: 1,
+          pageSize: 1000,
+        },
+      }
+    );
+    return response.data.data;
   },
 };
 

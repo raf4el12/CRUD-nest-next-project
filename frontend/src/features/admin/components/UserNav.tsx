@@ -11,7 +11,7 @@ import {
 } from '@/shared/ui/dropdown-menu';
 import { Button } from '@/shared/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
-import { useAuth } from '@/features/auth';
+import { useAuth } from '@/features/auth/context/auth-context';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import LogOut from 'lucide-react/dist/esm/icons/log-out';
 import Settings from 'lucide-react/dist/esm/icons/settings';

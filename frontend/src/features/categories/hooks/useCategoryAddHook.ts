@@ -6,7 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { categoriesService } from "../services/categories.service";
-import { categorySchema, CategoryFormValues } from "../validators/category";
+import { categorySchema } from "../validators/category";
+import type { CategoryFormValues } from "../validators/category";
 
 export function useCategoryAddHook() {
   const router = useRouter();

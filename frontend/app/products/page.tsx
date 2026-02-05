@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { fetchProductsPagination } from "@/features/products";
+import { fetchProductsPagination } from "@/features/products/services/products.service";
 
 type SearchParams = {
   currentPage?: string;
