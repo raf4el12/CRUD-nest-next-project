@@ -1,6 +1,6 @@
 'use client';
 
-import { Category } from "../types";
+import type { Category } from "../types";
 import { Button } from "@/shared/ui/button";
 import { CategoryEditDrawer } from "./CategoryEditDrawer";
 import { useCategoryEditHook } from "../hooks/useCategoryEditHook";

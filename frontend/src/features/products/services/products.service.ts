@@ -1,7 +1,7 @@
-import { apiClient } from "@/shared/api";
-import { Product } from "../types";
-import { ProductFormValues } from "../validators/product";
-import { PaginatedResponse } from "@/shared/types";
+import { apiClient } from "@/shared/api/client";
+import type { Product } from "../types";
+import type { ProductFormValues } from "../validators/product";
+import type { PaginatedResponse } from "@/shared/types";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
 
@@ -14,6 +14,10 @@ export const productsService = {
   async updateProduct(id: number, payload: ProductFormValues): Promise<Product> {
     const response = await apiClient.patch<Product>(`/products/${id}`, payload);
     return response.data;
+  },
+
+  async deleteProduct(id: number): Promise<void> {
+    await apiClient.delete(`/products/${id}`);
   },
 };
 

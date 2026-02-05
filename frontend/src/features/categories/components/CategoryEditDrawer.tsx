@@ -1,13 +1,15 @@
 import * as React from "react";
-import { UseFormReturn } from "react-hook-form";
+import type { UseFormReturn } from "react-hook-form";
 import { 
   Sheet, 
   SheetContent, 
   SheetHeader, 
   SheetTitle, 
-  SheetTrigger 
+  SheetTrigger,
+  SheetDescription,
 } from "@/shared/ui/sheet";
 import { Button } from "@/shared/ui/button";
+import { Separator } from "@/shared/ui/separator";
 import {
   Form,
   FormControl,
@@ -17,7 +19,8 @@ import {
   FormMessage,
 } from "@/shared/ui/form";
 import { Input } from "@/shared/ui/input";
-import { CategoryFormValues } from "../validators/category";
+import type { CategoryFormValues } from "../validators/category";
+import Tags from "lucide-react/dist/esm/icons/tags";
 
 interface CategoryEditDrawerProps {
   open: boolean;
@@ -41,16 +44,30 @@ export function CategoryEditDrawer({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       {trigger ? <SheetTrigger asChild>{trigger}</SheetTrigger> : null}
-      <SheetContent className="w-full max-w-lg">
-        <SheetHeader>
-          <SheetTitle>Editar categoría</SheetTitle>
-          {categoryName ? (
-            <p className="text-sm text-muted-foreground">{categoryName}</p>
-          ) : null}
+      <SheetContent className="w-full sm:max-w-lg p-0 flex flex-col">
+        <SheetHeader className="px-6 pt-6 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Tags className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <SheetTitle className="text-lg">Editar categoría</SheetTitle>
+              <SheetDescription>
+                {categoryName || "Actualiza la información de la categoría"}
+              </SheetDescription>
+            </div>
+          </div>
         </SheetHeader>
-        <div className="mt-6">
+
+        <Separator />
+
+        <div className="flex-1 px-6 py-6">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form
+              id="category-edit-form"
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-4"
+            >
               <FormField
                 control={form.control}
                 name="name"
@@ -64,12 +81,28 @@ export function CategoryEditDrawer({
                   </FormItem>
                 )}
               />
-
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? "Guardando..." : "Guardar cambios"}
-              </Button>
             </form>
           </Form>
+        </div>
+
+        <Separator />
+
+        <div className="flex items-center justify-end gap-3 px-6 py-4 bg-muted/30">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            disabled={isSubmitting}
+          >
+            Cancelar
+          </Button>
+          <Button
+            type="submit"
+            form="category-edit-form"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Guardando..." : "Guardar cambios"}
+          </Button>
         </div>
       </SheetContent>
     </Sheet>

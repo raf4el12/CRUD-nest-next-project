@@ -1,12 +1,12 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { authService } from '../services/auth.service';
-import { LoginDto, RegisterDto, User } from '../types';
+import type { LoginDto, RegisterDto, User } from '../types';
 import toast from 'react-hot-toast';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 interface AuthContextType {
     user: User | null;

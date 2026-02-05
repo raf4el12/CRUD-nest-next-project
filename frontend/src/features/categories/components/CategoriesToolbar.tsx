@@ -10,8 +10,8 @@ export function CategoriesToolbar() {
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
       <div>
-        <h2 className="text-base font-semibold">Categorías</h2>
-        <p className="text-sm text-muted-foreground">
+        <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground">Categorías</h2>
+        <p className="text-sm text-foreground">
           Crea y administra las categorías desde aquí.
         </p>
       </div>
@@ -22,7 +22,11 @@ export function CategoriesToolbar() {
         form={form}
         onSubmit={onSubmit}
         isSubmitting={isPending}
-        trigger={<Button size="sm">Agregar categoría</Button>}
+        trigger={
+          <Button size="sm" className="h-9 px-4 text-[11px] font-semibold uppercase tracking-[0.2em]">
+            Agregar categoría
+          </Button>
+        }
       />
     </div>
   );

@@ -1,7 +1,8 @@
 'use client';
 
-import { Sidebar, Header } from "@/features/admin";
-import { useAuth } from "@/features/auth";
+import { Sidebar } from "@/features/admin/components/Sidebar";
+import { Header } from "@/features/admin/components/Header";
+import { useAuth } from "@/features/auth/context/auth-context";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import Loader2 from "lucide-react/dist/esm/icons/loader-2";

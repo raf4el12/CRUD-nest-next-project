@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useTransition } from "react";
-import { useForm, UseFormReturn } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import type { UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { Product } from "../types";
+import type { Product } from "../types";
 import { productsService } from "../services/products.service";
-import { productEditSchema, ProductFormValues } from "../validators/product";
+import { productEditSchema } from "../validators/product";
+import type { ProductFormValues } from "../validators/product";
 
 interface UseProductEditHookProps {
   product: Product;

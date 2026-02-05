@@ -1,12 +1,14 @@
 'use client';
 
 import { useState, useTransition } from "react";
-import { useForm, UseFormReturn } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import type { UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { productsService } from "../services/products.service";
-import { productCreateSchema, ProductFormValues } from "../validators/product";
+import { productCreateSchema } from "../validators/product";
+import type { ProductFormValues } from "../validators/product";
 
 export function useProductAddHook() {
   const router = useRouter();
