@@ -13,6 +13,22 @@ enum UserRole {
   SUPPORT
 }
 
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
 model Category {
   id        Int       @id @default(autoincrement())
   name      String    @unique
@@ -25,14 +41,18 @@ model Product {
   id          Int       @id @default(autoincrement())
   name        String
   description String?
-  price  Float
+  price       Float
   image       String?
   isAvailable Boolean   @default(true)
+  stock       Int       @default(0)
   deletedAt   DateTime?
   categoryId  Int?
   category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  orderItems  OrderItem[]
+  cartItems   CartItem[]
 
   @@index([categoryId])
   @@index([isAvailable])
@@ -89,6 +109,9 @@ model Customers {
   shippingAddress String?
   billingAddress  String?
 
+  orders          Order[]
+  cartItems       CartItem[]
+
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
@@ -138,4 +161,51 @@ model PasswordResetTokens {
   createdAt DateTime @default(now())
 
   @@index([userId])
+}
+
+model Order {
+  id              Int           @id @default(autoincrement())
+  customerId      Int
+  customer        Customers     @relation(fields: [customerId], references: [id])
+  status          OrderStatus   @default(PENDING)
+  paymentStatus   PaymentStatus @default(PENDING)
+  totalAmount     Float
+  shippingAddress String
+  notes           String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  items           OrderItem[]
+
+  @@index([customerId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id          Int      @id @default(autoincrement())
+  orderId     Int
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId   Int
+  product     Product  @relation(fields: [productId], references: [id])
+  quantity    Int
+  unitPrice   Float
+  productName String
+  createdAt   DateTime @default(now())
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model CartItem {
+  id         Int       @id @default(autoincrement())
+  customerId Int
+  customer   Customers @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  productId  Int
+  product    Product   @relation(fields: [productId], references: [id])
+  quantity   Int       @default(1)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@unique([customerId, productId])
+  @@index([customerId])
 }

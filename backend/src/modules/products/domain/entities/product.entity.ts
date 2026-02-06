@@ -6,6 +6,7 @@ export class Product {
     readonly price: number,
     readonly image: string | null,
     readonly isAvailable: boolean,
+    readonly stock: number,
     readonly deletedAt: Date | null,
     readonly categoryId: number | null,
     readonly createdAt: Date,
