@@ -25,6 +25,7 @@ export class UpdateProductUseCase {
       price: dto.price ?? undefined,
       image: dto.image ?? undefined,
       isAvailable: dto.isAvailable ?? undefined,
+      stock: dto.stock ?? undefined,
       categoryId: dto.categoryId ?? undefined,
     });
   }

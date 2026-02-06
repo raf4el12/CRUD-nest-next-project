@@ -40,6 +40,13 @@ export class CreateProductDto {
   @IsOptional()
   isAvailable?: boolean;
 
+  @ApiPropertyOptional({ example: 100, description: 'Stock disponible' })
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  @IsOptional()
+  stock?: number;
+
   @ApiPropertyOptional({ example: 1, description: 'ID de categoría' })
   @Type(() => Number)
   @IsNumber()

@@ -106,6 +106,13 @@ export class PrismaUserRepository implements UserRepository {
     });
   }
 
+  async findCustomerByUserId(userId: number): Promise<Customer | null> {
+    const found = await this.prisma.customers.findUnique({
+      where: { userId },
+    });
+    return found ? this.toDomainCustomer(found) : null;
+  }
+
   private toDomainUser(
     user: Users,
     profile?: Profiles | null,

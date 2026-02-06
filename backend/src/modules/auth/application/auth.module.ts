@@ -12,6 +12,7 @@ import { TokenService } from '../infraestructure/services/token.service';
 import { REFRESH_TOKEN_REPOSITORY } from '../domain/repositories/refresh-token.repository';
 import { PrismaRefreshTokenRepository } from '../infraestructure/persistence/prisma-refresh-token.repository';
 import { JwtAuthGuard } from '../interfaces/guards/jwt-auth.guard';
+import { RolesGuard } from '../interfaces/guards/roles.guard';
 import {
   ACCESS_TOKEN_MINUTE_SIGN_NOMINAL,
   ACCESS_TOKEN_SECRET,
@@ -37,10 +38,12 @@ import {
     PasswordService,
     TokenService,
     JwtAuthGuard,
+    RolesGuard,
     {
       provide: REFRESH_TOKEN_REPOSITORY,
       useClass: PrismaRefreshTokenRepository,
     },
   ],
+  exports: [JwtAuthGuard, RolesGuard, JwtModule],
 })
 export class AuthModule {}

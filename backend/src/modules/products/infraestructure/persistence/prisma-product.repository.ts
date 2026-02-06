@@ -18,6 +18,7 @@ export class PrismaProductRepository implements ProductRepository {
         price: data.price ?? 0,
         image: data.image ?? null,
         isAvailable: data.isAvailable ?? true,
+        stock: data.stock ?? 0,
         categoryId: data.categoryId ?? null,
       },
     });
@@ -96,6 +97,7 @@ export class PrismaProductRepository implements ProductRepository {
         price: data.price ?? undefined,
         image: data.image ?? undefined,
         isAvailable: data.isAvailable ?? undefined,
+        stock: data.stock ?? undefined,
         categoryId: data.categoryId ?? undefined,
       },
     });
@@ -125,6 +127,7 @@ export class PrismaProductRepository implements ProductRepository {
       product.price,
       product.image ?? null,
       product.isAvailable,
+      product.stock,
       product.deletedAt ?? null,
       product.categoryId ?? null,
       product.createdAt,

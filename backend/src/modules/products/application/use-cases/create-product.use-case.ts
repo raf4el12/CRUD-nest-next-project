@@ -20,6 +20,7 @@ export class CreateProductUseCase {
       price: dto.price,
       image: dto.image ?? null,
       isAvailable: dto.isAvailable ?? true,
+      stock: dto.stock ?? 0,
       categoryId: dto.categoryId ?? null,
     });
   }
